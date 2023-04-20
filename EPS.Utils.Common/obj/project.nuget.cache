@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "FaqiRLkDHUkLx/V2+bJGC5RnyRe8GcbTexHyA8I0KYgKqv0zxg7+VFPFfYN3cMaSnuFitaRGYX/X66ygifuXPA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Admin\\Downloads\\DATN_BE-master\\DATN_BE\\at_smpservice-dev\\EPS.Utils.Common\\EPS.Utils.Common.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\system.linq.dynamic.core\\1.0.22\\system.linq.dynamic.core.1.0.22.nupkg.sha512"
+  ],
+  "logs": []
+}
