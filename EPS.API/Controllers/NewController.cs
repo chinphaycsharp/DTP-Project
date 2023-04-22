@@ -2,47 +2,42 @@
 using EPS.API.Helpers;
 using EPS.Data.Entities;
 using EPS.Service;
-using EPS.Service.Dtos.Menu;
-using EPS.Service.Dtos.Role;
+using EPS.Service.Dtos.New;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EPS.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/menus")]
+    [Route("api/new")]
     [Authorize]
-    public class MenuController : BaseController
+    public class NewController : BaseController
     {
         private Data.EPSContext _context;
-        private MenuService _menuService;
+        private NewService _newService;
 
-        public MenuController(MenuService menuService)
+        public NewController(NewService newService)
         {
-            _menuService = menuService;
+            _newService = newService;
         }
 
-        //list all
-        [HttpGet]
+        [HttpGet()]
         [AllowAnonymous]
-        public async Task<IActionResult> GetListMenus([FromQuery] MenuGridPagingDto pagingModel)
+        public async Task<IActionResult> GetListNews([FromQuery] NewGridPagingDto pagingModel)
         {
-            return Ok(await _menuService.GetMenus(pagingModel));
+            return Ok(await _newService.GetNews(pagingModel));
         }
 
-        //create
         [CustomAuthorize(PrivilegeList.CreateMenu)]
-        [HttpPost]
-        public async Task<ApiResult<string>> Create(MenuCreateDto menuCreateDto)
+        [HttpPost()]
+        public async Task<ApiResult<int>> CreateNew(NewCreateDto NewCreateDto)
         {
-            ApiResult<string> result = new ApiResult<string>();
-            menuCreateDto.Id = menuCreateDto.ParentId +"-"+ menuCreateDto.Id;
-            menuCreateDto.Created_date = DateTime.Now;
-            var dto = await _menuService.CreateMenu(menuCreateDto);
-            if (dto != "")
+            ApiResult<int> result = new ApiResult<int>();
+            NewCreateDto.Created_date = DateTime.Now;
+            var dto = await _newService.CreateNew(NewCreateDto);
+            if (dto >0)
             {
                 result.ResultObj = dto;
                 result.Message = "Thêm mới thành công !";
@@ -56,18 +51,15 @@ namespace EPS.API.Controllers
                 result.statusCode = 500;
                 return result;
             }
-            //return Ok(await _authorizationService.CreateRole(roleCreateDto));
         }
 
-        //update
         [CustomAuthorize(PrivilegeList.EditMenu)]
         [HttpPut("{id}")]
-        public async Task<ApiResult<int>> UpdateRole(string id, MenuUpadateDto menuUpdateDto)
+        public async Task<ApiResult<int>> UpdateNew(string id, NewUpdateDto menuUpdateDto)
         {
             ApiResult<int> result = new ApiResult<int>();
-            menuUpdateDto.Id = menuUpdateDto.ParentId + "-" + menuUpdateDto.Id;
             menuUpdateDto.Updated_date = DateTime.Now;
-            var dto = await _menuService.UpdateMenu(id, menuUpdateDto);
+            var dto = await _newService.UpdateNew(id, menuUpdateDto);
             if (dto == 1)
             {
                 result.ResultObj = dto;
@@ -82,15 +74,14 @@ namespace EPS.API.Controllers
                 result.statusCode = 500;
                 return result;
             }
-            //return Ok(await _authorizationService.UpdateRole(id, roleUpdateDto));
         }
 
         [CustomAuthorize(PrivilegeList.DeleteMenu)]
         [HttpDelete("{id}")]
-        public async Task<ApiResult<int>> Delete(string id)
+        public async Task<ApiResult<int>> DeleteNew(string id)
         {
             ApiResult<int> result = new ApiResult<int>();
-            var check = await _menuService.DeleteMenu(id);
+            var check = await _newService.DeleteNew(id);
             if (check == 1)
             {
                 result.ResultObj = check;
@@ -105,7 +96,6 @@ namespace EPS.API.Controllers
                 result.statusCode = 500;
                 return result;
             }
-            // return Ok(await _authorizationService.DeleteRole(id));
         }
     }
 }
